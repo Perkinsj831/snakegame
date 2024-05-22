@@ -25,7 +25,7 @@ body {
     flex-direction: column;
     border-radius: 5px;
     background: #293447;
-    margin-bottom: 20px; /* Add some space between the game screen and the D-pad */
+    margin-bottom: 20px;
 }
 
 .game-details {
@@ -54,7 +54,7 @@ body {
 }
 
 .controls {
-    display: none; /* Hide controls by default */
+    display: none;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -68,26 +68,35 @@ body {
         ". down .";
     gap: 10px;
     padding: 20px;
-    background: #444;
+    background: #2C3E50;
     border-radius: 10px;
     margin-top: 10px;
 }
 
 .controls .dpad i {
     color: #FFF;
-    background: #666;
-    padding: 20px;
+    background: #34495E;
+    padding: 15px;
     border-radius: 5px;
     font-size: 2rem;
     cursor: pointer;
     text-align: center;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .controls .dpad .up { grid-area: up; }
 .controls .dpad .down { grid-area: down; }
 .controls .dpad .left { grid-area: left; }
 .controls .dpad .right { grid-area: right; }
-.controls .dpad .center { grid-area: center; }
+.controls .dpad .center { grid-area: center; width: 60px; height: 60px; }
+
+.controls .dpad i:hover {
+    background: #1ABC9C;
+}
 
 @media screen and (max-width: 800px) {
     .wrapper {
@@ -99,10 +108,10 @@ body {
         padding: 15px 27px;
     }
     .controls {
-        display: flex; /* Show controls only on small screens */
+        display: flex;
     }
     .controls .dpad i {
-        padding: 15px;
+        padding: 10px;
         font-size: 1.5rem;
     }
 }
