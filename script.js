@@ -1,7 +1,8 @@
 const playBoard = document.querySelector(".play-board");
 const scoreElement = document.querySelector(".score");
 const highScoreElement = document.querySelector(".high-score");
-const controls = document.querySelectorAll(".controls i")
+const difficultyElement = document.querySelector(".difficulty");
+const controls = document.querySelectorAll(".controls i");
 const gameOverModal = document.getElementById("gameOverModal");
 const playAgainButton = document.getElementById("playAgainButton");
 const changeDifficultyButton = document.getElementById("changeDifficultyButton");
@@ -11,10 +12,14 @@ let foodX, foodY;
 let snakeX = 5, snakeY = 10;
 let snakeBody = [];
 let velocityX = 0, velocityY = 0;
-let setIntervalId; 
+let setIntervalId;
 let score = 0;
+let difficulty = "Easy";
+let lastSpeed = 250;
 
-let highScore = localStorage.getItem("high-score") || 0;
+const getHighScoreKey = (difficulty) => `high-score-${difficulty.toLowerCase()}`;
+
+let highScore = localStorage.getItem(getHighScoreKey(difficulty)) || 0;
 highScoreElement.innerText = `High Score: ${highScore}`;
 
 const changeFoodPosition = () => {
@@ -26,10 +31,8 @@ const handleGameOver = () => {
     clearInterval(setIntervalId);
     const finalScoreElement = document.getElementById("finalScore");
     finalScoreElement.innerText = `Your Score: ${score}`;
-    gameOverModal.style.display = "block"
+    gameOverModal.style.display = "block";
 }
-
-let lastSpeed = 250;
 
 playAgainButton.addEventListener("click", () => {
     gameOverModal.style.display = "none";
@@ -37,16 +40,16 @@ playAgainButton.addEventListener("click", () => {
 });
 
 const changeDirection = (e) => {
-    if(e.key === "ArrowUp" && velocityY !== 1) {
+    if (e.key === "ArrowUp" && velocityY !== 1) {
         velocityX = 0;
         velocityY = -1;
-    } else if(e.key === "ArrowDown" && velocityY !== -1) {
+    } else if (e.key === "ArrowDown" && velocityY !== -1) {
         velocityX = 0;
         velocityY = 1;
-    } else if(e.key === "ArrowLeft" && velocityX !== 1) {
+    } else if (e.key === "ArrowLeft" && velocityX !== 1) {
         velocityX = -1;
         velocityY = 0;
-    } else if(e.key === "ArrowRight" && velocityX !== -1) {
+    } else if (e.key === "ArrowRight" && velocityX !== -1) {
         velocityX = 1;
         velocityY = 0;
     }
@@ -61,23 +64,23 @@ document.addEventListener('DOMContentLoaded', () => {
     startModal.style.display = "block";
     const difficultyButtons = document.querySelectorAll('.difficulty-button');
     difficultyButtons.forEach(button => {
-        button.addEventListener('click', function() {
-           lastSpeed = parseInt(this.getAttribute("data-speed"));
-           startGame(lastSpeed);
-           startModal.style.display = "none";
+        button.addEventListener('click', function () {
+            lastSpeed = parseInt(this.getAttribute("data-speed"));
+            difficulty = this.getAttribute("data-difficulty");
+            difficultyElement.innerText = `Difficulty: ${difficulty}`;
+            highScore = localStorage.getItem(getHighScoreKey(difficulty)) || 0;
+            highScoreElement.innerText = `High Score: ${highScore}`;
+            startGame(lastSpeed);
+            startModal.style.display = "none";
         });
     });
-
-    if (!localStorage.getItem("gameInitialized")) {
-        startModal.style.display = "block";
-    }
 });
 
 changeDifficultyButton.addEventListener("click", () => {
     gameOverModal.style.display = "none";
     const startModal = document.getElementById("startModal");
     startModal.style.display = "block";
-})
+});
 
 const startGame = (speed) => {
     clearInterval(setIntervalId);
@@ -87,23 +90,23 @@ const startGame = (speed) => {
     velocityX = 0; velocityY = 0;
     score = 0;
     scoreElement.innerText = `Score: ${score}`;
-    highScore = localStorage.getItem("high-score") || 0;
+    highScore = localStorage.getItem(getHighScoreKey(difficulty)) || 0;
     highScoreElement.innerText = `High Score: ${highScore}`;
     changeFoodPosition();
     setIntervalId = setInterval(initGame, speed);
 }
 
 const initGame = () => {
-    if(gameOver) return handleGameOver();
+    if (gameOver) return handleGameOver();
     let htmlMarkup = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
 
-    if(snakeX === foodX && snakeY === foodY) {
+    if (snakeX === foodX && snakeY === foodY) {
         changeFoodPosition();
         snakeBody.push([foodX, foodY]);
-        score++
+        score++;
 
         highScore = score >= highScore ? score : highScore;
-        localStorage.setItem("high-score", highScore);
+        localStorage.setItem(getHighScoreKey(difficulty), highScore);
         scoreElement.innerText = `Score: ${score}`;
         highScoreElement.innerText = `High Score: ${highScore}`;
     }
@@ -117,14 +120,14 @@ const initGame = () => {
     snakeX += velocityX;
     snakeY += velocityY;
 
-    if(snakeX <= 0 || snakeX > 30 || snakeY <= 0 || snakeY > 30){
+    if (snakeX <= 0 || snakeX > 30 || snakeY <= 0 || snakeY > 30) {
         gameOver = true;
     }
 
-    for (let i = 0; i < snakeBody.length; i++) {    
+    for (let i = 0; i < snakeBody.length; i++) {
         htmlMarkup += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>`;
-        if(i !== 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
-           gameOver = true; 
+        if (i !== 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
+            gameOver = true;
         }
     }
     playBoard.innerHTML = htmlMarkup;
