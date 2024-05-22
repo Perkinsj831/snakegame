@@ -16,13 +16,18 @@
             <span class="high-score">High Score: 30</span>
         </div>
         <div class="play-board"></div>
-        <div class="controls">
-            <i data-key="ArrowUp" class="fa-solid fa-arrow-up-long"></i>
-                <i data-key="ArrowLeft" class="fa-solid fa-arrow-left-long"></i>
-                <i data-key="ArrowRight" class="fa-solid fa-arrow-right-long"></i>
-            <i data-key="ArrowDown" class="fa-solid fa-arrow-down-long"></i>
+    </div>
+
+    <div class="controls">
+        <div class="dpad">
+            <i data-key="ArrowUp" class="fa-solid fa-arrow-up-long up"></i>
+            <i data-key="ArrowLeft" class="fa-solid fa-arrow-left-long left"></i>
+            <i data-key="ArrowRight" class="fa-solid fa-arrow-right-long right"></i>
+            <i data-key="ArrowDown" class="fa-solid fa-arrow-down-long down"></i>
+            <div class="center"></div>
         </div>
     </div>
+
     <div id="startModal" class="modal">
         <div class="modal-content">
             <h2>Select Difficulty</h2>
@@ -32,6 +37,7 @@
             <button class="difficulty-button expert" data-speed="100">Expert</button>
         </div>
     </div>
+
     <div id="gameOverModal" class="modal">
         <div class="modal-content">
             <h2>Game Over!</h2>
